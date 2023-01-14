@@ -5,18 +5,7 @@ import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import data from "../data.json"
 import { Workout } from "../types/data";
 import WorkoutItem from "../comonents/WorkoutItem";
-
-const PressebleItem = ({item}: {item: Workout}) => {
-    return (
-    <Pressable
-        onPress={() => alert(`i'm pressed - ${item.name}`)}
-    >
-        <WorkoutItem
-            item={item} 
-        />
-    </Pressable>
-    )
-}
+import Navigation from "../navigation";
 
 export default function HomeScreen({navigation}: any) {
 
@@ -45,7 +34,18 @@ export default function HomeScreen({navigation}: any) {
             </SofiaSans>
             <FlatList
                 data={data as Workout[]}
-                renderItem={PressebleItem}
+                renderItem={({item}) => {
+                    return (
+                    <Pressable
+                    onPress={() =>
+                        navigation.navigate("WorkoutDetail", {slug: item.slug})
+                    }
+                    >
+                    <WorkoutItem
+                        item={item}
+                    />
+                    </Pressable>
+                );}}
                 keyExtractor={item => item.slug}
             />
         </View>

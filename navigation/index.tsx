@@ -7,7 +7,7 @@ import { Entypo } from "@expo/vector-icons";
 
 import HomeScreen from "../screens/HomeScreen";
 import PlannerScreen from "../screens/PlannerScreen";
-
+import WorkoutDetailScreen from "../screens/WorkoutDetailScreen";
 
 export default function Navigation() {
     return (
@@ -21,13 +21,18 @@ const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
     return (
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator>
             <Stack.Screen
                 name="Root"
                 component={BottomTabNavigator}
-                options={{ headerShown: false }}
+                options={{ headerShown: false}}
             />
-        </Stack.Navigator>
+            <Stack.Screen
+                name="WorkoutDetail"
+                component={WorkoutDetailScreen}
+                options={{title: "Workout Info"}}
+            />
+    </Stack.Navigator>
     )
 }
 
