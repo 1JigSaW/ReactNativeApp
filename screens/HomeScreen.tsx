@@ -1,39 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SofiaSans } from "../comonents/styled/SofiaSans";
 import { View, Text, Button, StyleSheet, FlatList, Pressable } from "react-native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import data from "../data.json"
-import { Workout } from "../types/data";
 import WorkoutItem from "../comonents/WorkoutItem";
 import Navigation from "../navigation";
+import { useWorkouts } from "../hooks/useWorkouts";
 
 export default function HomeScreen({navigation}: any) {
 
-    // const workout = Workout => {
-    //     slug: "sdas",
-    //     name: "asdas",
-    //     duration: 123,
-    //     difficulty: "hard",
-    //     sequence: []
-    // }
-
-    // const renderItem = ({item}: {item: Workout}) => (
-    //     <View>
-    //         <Text>{item.name}</Text>
-    //         <Text>{item.difficulty}</Text>
-    //     </View>
-    // )
+    const workouts = useWorkouts();
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>New Workout</Text>
             <SofiaSans
             style={{fontSize: 30}}
             >
                 New Workout
             </SofiaSans>
             <FlatList
-                data={data as Workout[]}
+                data={workouts}
                 renderItem={({item}) => {
                     return (
                     <Pressable
