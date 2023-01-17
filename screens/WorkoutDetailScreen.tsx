@@ -1,8 +1,9 @@
-import { SofiaSans } from "../comonents/styled/SofiaSans";
-import { View, Text, Button, StyleSheet,} from "react-native";
+
+import { View, Text, Button, StyleSheet, Pressable } from "react-native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { useEffect } from "react";
-import { getWorkoutsBySlug } from "../storage/workout";
+import { useWorkoutBySlug } from "../hooks/useWorkoutBySlug";
+import React from "react";
+import { Modal } from "../comonents/styled/Modal";
 
 type DetailParams = {
     route: {
@@ -15,25 +16,12 @@ type DetailParams = {
   type Navigation = NativeStackHeaderProps & DetailParams
   
   export default function WorkoutDetailScreen({route}: Navigation) {
-
-    useEffect(() => {
-        async function getData() {
-            const workout = await getWorkoutsBySlug(route.params.slug);
-            console.log(workout)
-        }
-
-        getData();
-    }, [])
+    const workout = useWorkoutBySlug(route.params.slug);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Slug - {route.params.slug}</Text>
-            <SofiaSans
-            style={{fontSize: 30}}
-            >
-                New Workout
-            </SofiaSans>
-            
+            <Text style={styles.header}>{workout?.name}</Text>
+            <Modal />
         </View>
     )
 }
@@ -47,6 +35,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 20,
         fontWeight: "bold",
-    }
+    },
 })
-
