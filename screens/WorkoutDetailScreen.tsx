@@ -4,6 +4,10 @@ import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { useWorkoutBySlug } from "../hooks/useWorkoutBySlug";
 import React from "react";
 import { Modal } from "../comonents/styled/Modal";
+import { PressableText } from "../comonents/styled/PressableText";
+import { formatSec } from "../utils/time";
+import { FontAwesome } from "@expo/vector-icons";
+import WorkoutItem from "../comonents/WorkoutItem";
 
 type DetailParams = {
     route: {
@@ -20,9 +24,39 @@ type DetailParams = {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>{workout?.name}</Text>
-            <Modal />
-        </View>
+            <WorkoutItem
+              item={workout}
+              childStyles={{marginTop: 10}}
+            >
+          <Modal
+            activator={({handleOpen}) =>
+              <PressableText
+                onPress={handleOpen}
+                text="Check Sequence"
+              />
+            }
+          >
+            <View>
+              { workout?.sequence.map((si, idx) =>
+                <View
+                  key={si.slug}
+                  style={styles.sequenceItem}
+                >
+                  <Text>
+                    {si.name} | {si.type} | {formatSec(si.duration)}
+                  </Text>
+                  { idx !== workout.sequence.length - 1 &&
+                    <FontAwesome
+                      name="arrow-down"
+                      size={20}
+                    />
+                  }
+                </View>
+              )}
+            </View>
+          </Modal>
+        </WorkoutItem>
+      </View>
     )
 }
 
@@ -36,4 +70,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontWeight: "bold",
     },
+    sequenceItem: {
+      alignItems: "center"
+    }
 })
