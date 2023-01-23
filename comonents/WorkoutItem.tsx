@@ -3,20 +3,20 @@ import { Workout } from "../types/data";
 import { formatSec } from "../utils/time";
 
 export default function WorkoutItem({item, children, childStyles = {}}: {
-  item: Workout,
+  item: any,
   children?: React.ReactNode,
   childStyles?: StyleProp<ViewStyle>
 }) {
   return (
     <View style={styles.container}>
       <Text
-        style={styles.name}>{item.name}
+        style={styles.name}>{item?.name}
       </Text>
       <Text
-        style={styles.duration}>Duration: {formatSec(item.duration)}
+        style={styles.duration}>Duration: {formatSec(item?.duration)}
       </Text>
       <Text
-        style={styles.difficulty}>Difficulty: {item.difficulty}
+        style={styles.difficulty}>Difficulty: {item?.difficulty}
       </Text>
       { children &&
         <View style={childStyles}>

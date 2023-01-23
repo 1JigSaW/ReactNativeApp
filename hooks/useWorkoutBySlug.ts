@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import { getWorkoutsBySlug } from "../storage/workout";
+import { getWorkoutBySlug } from "../storage/workout";
 import { Workout } from "../types/data";
 
 export const useWorkoutBySlug = (slug: string) => {
-    const [workout, setWorkout] = useState<Workout>();
+  const [workout, setWorkout] = useState<Workout>();
 
-    useEffect(() => {
-        async function getData() {
-            console.log("Getting Data!");
-            const _workout = await getWorkoutsBySlug(slug);
-            setWorkout(_workout);
-        }
+  useEffect(() => {
+    async function getData() {
+      const _workout = await getWorkoutBySlug(slug);
+      setWorkout(_workout);
+    }
 
-        
-        getData();
-    }, [])
+    getData();
+  }, [])
 
-    return workout;
+  return workout;
 }
