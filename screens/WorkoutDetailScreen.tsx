@@ -28,16 +28,35 @@ type DetailParams = {
 
     const workout = useWorkoutBySlug(route.params.slug);
 
-    const countDown = useCountDown(
+    const { countDown, isRunning, stop, start } = useCountDown(
       trackerIdx,
       trackerIdx >= 0 ? sequence[trackerIdx].duration : -1
     )
 
+
+    useEffect(() => {
+      console.log(countDown);
+      if (!workout) { return; }
+      
+      if (trackerIdx + 1 === workout.sequence.length) {return;}
+
+      if (countDown === 0) {
+        addItemToSequence(trackerIdx + 1)
+      }
+    }, [countDown])
+
     const addItemToSequence = (idx: number) => {
-      debugger
       setSequence([...sequence, workout!.sequence[idx]]);
-      setTrackerIdx(idx)
+      setTrackerIdx(idx);
+      start(100);
     }
+
+    if (!workout) {
+      return null;
+    }
+
+    const hasReacedEnd = sequence.length === workout.sequence.length &&
+    countDown === 0
 
     return (
         <View style={styles.container}>
@@ -73,7 +92,7 @@ type DetailParams = {
             </View>
           </Modal>
         </WorkoutItem>
-        <View>
+        <View style={styles.centerView}>
           { sequence.length === 0 &&
           <FontAwesome 
             name="play-circle-o"
@@ -81,6 +100,24 @@ type DetailParams = {
             onPress={() => addItemToSequence(0)}
           />
           }
+          {
+            sequence.length > 0 && countDown >= 0 &&
+            <View>
+              <Text style={{fontSize: 55}}>
+                {countDown}
+              </Text>
+            </View>
+          }
+        </View>
+        <View style={{alignItems: "center"}}>
+          <Text style={{fontSize: 60, fontWeight: "bold"}}>
+            {
+              sequence.length === 0 ?
+              "Prepare" :
+              hasReacedEnd ?
+              "Great Job" : sequence[trackerIdx].name
+            }
+          </Text>
         </View>
       </View>
     )
@@ -98,5 +135,11 @@ const styles = StyleSheet.create({
     },
     sequenceItem: {
       alignItems: "center"
+    },
+    centerView: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      marginBottom: 20
     }
 })
