@@ -10,6 +10,7 @@ export default function useCachedResourced() {
     useEffect(() =>{
         async function loadResourcesAndDataAsync() {
             try {
+                
                 await initWorkouts();
                 await Font.loadAsync({
                     "sofiasans": require("../assets/fonts/SofiaSans-Regular.ttf"),

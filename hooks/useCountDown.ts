@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function useCountDown(
     idx: number,
-    initialCount: number
+    initialCount: number = -1
 ) {
     const intervalRef = useRef<number>();
     const [countDown, setCountDown] = useState(initialCount);
@@ -19,7 +19,7 @@ export function useCountDown(
               setCountDown((count) => {
                 return count - 1;
               })
-            }, 10)
+            }, 50)
           }
           return cleaup;
         }, [idx, isRunning])

@@ -10,6 +10,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import WorkoutItem from "../comonents/WorkoutItem";
 import { SequenceItem } from "../types/data";
 import { useCountDown } from "../hooks/useCountDown";
+import { setStatusBarBackgroundColor } from "expo-status-bar";
 
 type DetailParams = {
     route: {
@@ -28,10 +29,9 @@ type DetailParams = {
 
     const workout = useWorkoutBySlug(route.params.slug);
 
-    const { countDown, isRunning, stop, start } = useCountDown(
-      trackerIdx,
-      trackerIdx >= 0 ? sequence[trackerIdx].duration : -1
-    )
+
+    const startupSeq = ["3", "2", "1", "Go"].reverse();
+    const { countDown, isRunning, stop, start } = useCountDown(trackerIdx)
 
 
     useEffect(() => {
@@ -46,9 +46,16 @@ type DetailParams = {
     }, [countDown])
 
     const addItemToSequence = (idx: number) => {
-      setSequence([...sequence, workout!.sequence[idx]]);
+      let newSequence = [];
+        
+      if (idx > 0) {
+        newSequence = [...sequence, workout!.sequence[idx]]
+      } else {
+        newSequence = [workout!.sequence[idx]]
+      }
+      setSequence(newSequence);
       setTrackerIdx(idx);
-      start(100);
+      start(newSequence[idx].duration + startupSeq.length);
     }
 
     if (!workout) {
@@ -92,32 +99,58 @@ type DetailParams = {
             </View>
           </Modal>
         </WorkoutItem>
-        <View style={styles.centerView}>
-          { sequence.length === 0 &&
-          <FontAwesome 
-            name="play-circle-o"
-            size={100}
-            onPress={() => addItemToSequence(0)}
-          />
-          }
-          {
-            sequence.length > 0 && countDown >= 0 &&
-            <View>
-              <Text style={{fontSize: 55}}>
-                {countDown}
-              </Text>
+        <View style={styles.wrapper}>
+          <View style={styles.counterUI}>
+            <View style={styles.counterItem}>
+              { sequence.length === 0 ?
+              <FontAwesome 
+                name="play-circle-o"
+                size={100}
+                onPress={() => addItemToSequence(0)}
+              /> :
+              isRunning ?
+              <FontAwesome 
+                name="stop-circle-o"
+                size={100}
+                onPress={() => stop()}
+              /> :
+              <FontAwesome 
+                name="play-circle-o"
+                size={100}
+                onPress={() => {
+                  if (hasReacedEnd) {
+                    addItemToSequence(0)
+                  } else {
+                    start(countDown)
+                  }
+                
+                }}
+              />
+              }
             </View>
-          }
-        </View>
-        <View style={{alignItems: "center"}}>
-          <Text style={{fontSize: 60, fontWeight: "bold"}}>
             {
-              sequence.length === 0 ?
-              "Prepare" :
-              hasReacedEnd ?
-              "Great Job" : sequence[trackerIdx].name
+              sequence.length > 0 && countDown >= 0 &&
+              <View style={styles.counterItem}>
+                <Text style={{fontSize: 55}}>
+                  {
+                    countDown > sequence[trackerIdx].duration ?
+                    startupSeq[countDown - sequence[trackerIdx].duration - 1] :
+                    countDown
+                  }
+                </Text>
+              </View>
             }
-          </Text>
+          </View>
+          <View style={{alignItems: "center"}}>
+            <Text style={{fontSize: 60, fontWeight: "bold"}}>
+              {
+                sequence.length === 0 ?
+                "Prepare" :
+                hasReacedEnd ?
+                "Great Job" : sequence[trackerIdx].name
+              }
+            </Text>
+          </View>
         </View>
       </View>
     )
@@ -136,10 +169,21 @@ const styles = StyleSheet.create({
     sequenceItem: {
       alignItems: "center"
     },
-    centerView: {
+    counterUI: {
       flexDirection: "row",
       justifyContent: "space-around",
       alignItems: "center",
       marginBottom: 20
+    }, 
+    counterItem: {
+      flex: 1,
+      alignItems: "center",
+    },
+    wrapper: {
+      borderRadius: 10,
+      borderColor: "rgba(0,0,0,0.1)",
+      backgroundColor: "#fff",
+      borderWidth: 1, 
+      padding: 10
     }
 })
