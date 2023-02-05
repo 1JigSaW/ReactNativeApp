@@ -3,6 +3,8 @@
 export type Difficulty = "easy" | "normal" | "hard"
 export type SequenceType = "exercise" | "stretch" | "break"
 
+
+
 export interface Workout {
   slug: string,
   name: string,
