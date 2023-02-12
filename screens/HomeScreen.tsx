@@ -5,6 +5,7 @@ import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import WorkoutItem from "../comonents/WorkoutItem";
 import Navigation from "../navigation";
 import { useWorkouts } from "../hooks/useWorkouts";
+import { ThemeText } from "./Text";
 
 export default function HomeScreen({navigation}: any) {
 
@@ -12,11 +13,7 @@ export default function HomeScreen({navigation}: any) {
 
     return (
         <View style={styles.container}>
-            <SofiaSans
-            style={{fontSize: 30}}
-            >
-                New Workout
-            </SofiaSans>
+            <ThemeText style={styles.header}>New Workouts</ThemeText>
             <FlatList
                 data={workouts}
                 renderItem={({item}) => {

@@ -27,9 +27,6 @@ export default function ExerciseForm({
 
     return (
         <View style={styles.container}>
-            <Text>
-                Exercise Form
-            </Text>
             <View>
                 <View style={styles.rowContainer}>
                     <Controller 
@@ -43,6 +40,7 @@ export default function ExerciseForm({
                                 onChangeText={onChange}
                                 value={value}
                                 style={styles.input}
+                                placeholderTextColor={"rgba(0,0,0,0.4)"}
                                 placeholder="Name"
                             />
                         }
@@ -59,6 +57,7 @@ export default function ExerciseForm({
                                 onChangeText={onChange}
                                 value={value}
                                 style={styles.input}
+                                placeholderTextColor={"rgba(0,0,0,0.4)"}
                                 placeholder="Duration"
                             />
                         }
@@ -76,6 +75,7 @@ export default function ExerciseForm({
                                 onChangeText={onChange}
                                 value={value}
                                 style={styles.input}
+                                placeholderTextColor={"rgba(0,0,0,0.4)"}
                                 placeholder="Repetitions"
                             />
                         }
@@ -108,6 +108,7 @@ export default function ExerciseForm({
                                         onPressIn={() => setSelectionOn(true)}
                                         style={styles.input}
                                         value={value}
+                                        placeholderTextColor={"rgba(0,0,0,0.4)"}
                                         placeholder="Type"
                                     /> 
                                 }
@@ -116,7 +117,8 @@ export default function ExerciseForm({
                     />
                 </View>
                 <PressableText 
-                    text="Submit"
+                    style={{marginTop: 15}}
+                    text="Add exercise"
                     onPress={handleSubmit((data) => {
                         onSubmit(data as ExerciseFormDate);  
                     })}
